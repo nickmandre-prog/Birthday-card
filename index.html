@@ -1,768 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Happy 22nd Birthday</title>
-  <style>
-    :root{
-      --bg0:#05060a;
-      --bg1:#0b0f1f;
-      --ink:#e9e6df;
-      --muted:rgba(233,230,223,.72);
-      --gold:#d9b86a;
-      --gold2:#a9863a;
-      --paper:#0f1326;
-      --paper2:#0b0f1f;
-      --shadow: 0 24px 60px rgba(0,0,0,.65);
-      --radius:18px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy 22nd Birthday</title>
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      background:
-        radial-gradient(1200px 700px at 70% 30%, rgba(217,184,106,.15), transparent 60%),
-        radial-gradient(900px 600px at 20% 70%, rgba(120,110,255,.10), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      color:var(--ink);
-      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
-      overflow:hidden;
-    }
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background: radial-gradient(circle at 30% 20%, #1a1f3a, #05060a 70%);
+    font-family: Georgia, serif;
+    color:#f5f5f5;
+    overflow:hidden;
+}
 
-    /* Subtle floating dust */
-    .dust{
-      position:fixed; inset:0; pointer-events:none; opacity:.55;
-      background-image:
-        radial-gradient(circle at 10% 20%, rgba(255,255,255,.10) 0 1px, transparent 2px),
-        radial-gradient(circle at 90% 30%, rgba(255,255,255,.08) 0 1px, transparent 2px),
-        radial-gradient(circle at 30% 80%, rgba(255,255,255,.06) 0 1px, transparent 2px),
-        radial-gradient(circle at 70% 75%, rgba(255,255,255,.07) 0 1px, transparent 2px),
-        radial-gradient(circle at 55% 45%, rgba(255,255,255,.05) 0 1px, transparent 2px);
-      background-size: 280px 280px;
-      animation: drift 18s linear infinite;
-      filter: blur(.2px);
-    }
-    @keyframes drift{
-      from{ transform: translate3d(0,0,0); }
-      to{ transform: translate3d(-280px,-280px,0); }
-    }
+.book{
+    width:900px;
+    height:550px;
+    margin:auto;
+    position:relative;
+    top:50%;
+    transform:translateY(-50%);
+    perspective:2000px;
+}
 
-    .wrap{
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 24px;
-    }
+.sheet{
+    position:absolute;
+    width:100%;
+    height:100%;
+    transform-origin:left;
+    transform-style:preserve-3d;
+    transition:1.2s ease;
+}
 
-    .stage{
-      width:min(980px, 96vw);
-      height:min(620px, 86vh);
-      position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
+.page{
+    position:absolute;
+    width:100%;
+    height:100%;
+    backface-visibility:hidden;
+    background:linear-gradient(135deg,#0f1326,#0b0f1f);
+    padding:60px;
+    box-sizing:border-box;
+    border-radius:15px;
+    box-shadow:0 25px 60px rgba(0,0,0,.6);
+}
 
-    .header{
-      position:absolute;
-      top: 14px;
-      left: 14px;
-      right: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      z-index:50;
-    }
+.page.back{
+    transform:rotateY(180deg);
+}
 
-    .title{
-      display:flex;
-      flex-direction:column;
-      gap:3px;
-      pointer-events:none;
-    }
-    .title .kicker{
-      font-size:12px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:rgba(217,184,106,.85);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    .title .sub{
-      font-size:12px;
-      color:var(--muted);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+.sheet.flipped{
+    transform:rotateY(-180deg);
+}
 
-    .controls{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:flex-end;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+h1,h2{
+    margin-top:0;
+    color:#d9b86a;
+}
 
-    button{
-      appearance:none;
-      border:1px solid rgba(217,184,106,.35);
-      background: linear-gradient(180deg, rgba(217,184,106,.14), rgba(169,134,58,.08));
-      color:var(--ink);
-      padding:10px 14px;
-      border-radius: 999px;
-      cursor:pointer;
-      box-shadow: 0 10px 28px rgba(0,0,0,.35);
-      transition: transform .15s ease, border-color .2s ease, background .2s ease, opacity .2s ease;
-      font-size: 13px;
-      letter-spacing:.02em;
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      user-select:none;
-    }
-    button:hover{ transform: translateY(-1px); border-color: rgba(217,184,106,.55); }
-    button:active{ transform: translateY(0px); }
-    button:disabled{
-      opacity:.35;
-      cursor:not-allowed;
-      transform:none;
-    }
+.controls{
+    position:absolute;
+    top:20px;
+    right:20px;
+}
 
-    .progress{
-      font-size:12px;
-      color: rgba(233,230,223,.62);
-      margin-left: 10px;
-      white-space:nowrap;
-    }
+button{
+    background:#111;
+    border:1px solid #d9b86a55;
+    color:#fff;
+    padding:8px 14px;
+    margin-left:5px;
+    border-radius:20px;
+    cursor:pointer;
+}
 
-    .hint{
-      position:absolute;
-      bottom: 14px;
-      left: 14px;
-      right: 14px;
-      text-align:center;
-      color: rgba(233,230,223,.62);
-      font-size:12px;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      z-index:50;
-      pointer-events:none;
-    }
+button:disabled{
+    opacity:.3;
+    cursor:not-allowed;
+}
 
-    /* Book */
-    .book{
-      width: min(920px, 96vw);
-      height: min(560px, 78vh);
-      position:relative;
-      perspective: 2200px;
-      filter: drop-shadow(0 30px 60px rgba(0,0,0,.55));
-    }
+/* Wax seal */
+.sealOverlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.8);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:100;
+}
 
-    .spineGlow{
-      position:absolute;
-      left:50%;
-      top:7%;
-      width:2px;
-      height:86%;
-      transform: translateX(-50%);
-      background: linear-gradient(180deg, transparent, rgba(217,184,106,.35), transparent);
-      box-shadow: 0 0 24px rgba(217,184,106,.35);
-      z-index:1;
-      pointer-events:none;
-    }
+.waxSeal{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:radial-gradient(circle at 40% 40%,#a61834,#600818);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    box-shadow:0 20px 50px rgba(0,0,0,.6);
+}
 
-    .sheet{
-      position:absolute;
-      inset:0;
-      transform-style: preserve-3d;
-      transform-origin: left center;
-      transition: transform 1.15s cubic-bezier(.2,.9,.15,1);
-      z-index: 10; /* will be overridden by JS */
-    }
+.waxSeal span{
+    font-size:40px;
+    font-weight:bold;
+}
 
-    .page{
-      position:absolute;
-      inset:0;
-      backface-visibility: hidden;
-      border-radius: var(--radius);
-      background:
-        radial-gradient(900px 400px at 30% 20%, rgba(217,184,106,.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.22)),
-        linear-gradient(135deg, var(--paper), var(--paper2));
-      border: 1px solid rgba(217,184,106,.22);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
+.hidden{
+    display:none;
+}
 
-    /* page edge shimmer */
-    .page::before{
-      content:"";
-      position:absolute;
-      top:0; bottom:0;
-      left:0;
-      width:22px;
-      background: linear-gradient(90deg, rgba(217,184,106,.18), transparent);
-      opacity:.75;
-      pointer-events:none;
-    }
+/* Typewriter */
+.tw{
+    white-space:pre-line;
+}
 
-    .page.back{
-      transform: rotateY(180deg);
-    }
+.caret{
+    animation:blink 1s infinite;
+}
 
-    .content{
-      height:100%;
-      padding: 44px 56px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap: 18px;
-      position:relative;
-    }
-
-    .sigil{
-      position:absolute;
-      top: 26px;
-      right: 28px;
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      border: 1px solid rgba(217,184,106,.35);
-      display:grid;
-      place-items:center;
-      color: rgba(217,184,106,.85);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      letter-spacing:.08em;
-      font-size: 12px;
-      opacity:.85;
-    }
-
-    h1,h2{
-      margin:0;
-      line-height:1.15;
-      font-weight:600;
-      letter-spacing:.01em;
-      text-shadow: 0 10px 30px rgba(0,0,0,.45);
-    }
-
-    h1{ font-size: clamp(30px, 4.3vw, 52px); }
-    h2{ font-size: clamp(22px, 3.2vw, 36px); }
-
-    .gold{
-      background: linear-gradient(90deg, var(--gold), #f3e1b0, var(--gold2));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-
-    p{
-      margin:0;
-      color: rgba(233,230,223,.86);
-      font-size: clamp(14px, 1.45vw, 18px);
-      line-height: 1.7;
-    }
-
-    .small{
-      color: rgba(233,230,223,.68);
-      font-size: 13px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-
-    .divider{
-      width: 120px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(217,184,106,.55), transparent);
-      margin: 6px 0 2px;
-      opacity:.9;
-    }
-
-    /* flip behavior */
-    .sheet.flipped{ transform: rotateY(-180deg); }
-
-    /* responsive */
-    @media (max-width: 720px){
-      .content{ padding: 34px 24px; }
-      .page::before{ width: 14px; }
-      .sigil{ top:18px; right:18px; width:40px; height:40px; }
-    }
-
-    /* “mysterious” entrance */
-    .bookFade{ animation: rise .9s ease-out both; }
-    @keyframes rise{
-      from{ transform: translateY(12px); opacity:0; }
-      to{ transform: translateY(0); opacity:1; }
-    }
-
-    /* click-to-advance overlay */
-    .tap{
-      position:absolute;
-      inset:0;
-      border-radius: var(--radius);
-      cursor:pointer;
-      z-index:45;
-      background: transparent;
-    }
-
-    a{
-      color: rgba(217,184,106,.95);
-      text-decoration: none;
-      border-bottom: 1px dashed rgba(217,184,106,.45);
-    }
-    a:hover{ border-bottom-color: rgba(217,184,106,.8); }
-
-    /* Typewriter caret */
-    .tw{
-      position:relative;
-      min-height: 1.2em;
-    }
-    .tw .caret{
-      display:inline-block;
-      width: 0.55em;
-      transform: translateY(1px);
-      color: rgba(217,184,106,.85);
-      animation: blink 1s steps(1) infinite;
-      margin-left: 2px;
-    }
-    @keyframes blink { 50% { opacity:0; } }
-
-    /* Wax seal overlay */
-    .sealOverlay{
-      position:absolute;
-      inset:0;
-      border-radius: var(--radius);
-      z-index: 200;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:
-        radial-gradient(800px 420px at 50% 30%, rgba(0,0,0,.20), rgba(0,0,0,.72)),
-        linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.75));
-      backdrop-filter: blur(2px);
-      transition: opacity .35s ease;
-    }
-    .sealOverlay.hidden{
-      opacity:0;
-      pointer-events:none;
-    }
-
-    .sealCard{
-      width: min(520px, 86%);
-      text-align:center;
-      padding: 22px 18px 10px;
-      position:relative;
-    }
-    .sealCard .whisper{
-      color: rgba(233,230,223,.70);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      font-size: 12px;
-      margin-bottom: 14px;
-    }
-
-    .ribbon{
-      position:relative;
-      height: 70px;
-      margin: 0 auto 6px;
-      width: min(420px, 92%);
-      filter: drop-shadow(0 18px 24px rgba(0,0,0,.45));
-    }
-    .ribbon::before,
-    .ribbon::after{
-      content:"";
-      position:absolute;
-      top: 18px;
-      width: 46%;
-      height: 18px;
-      background: linear-gradient(180deg, rgba(217,184,106,.32), rgba(169,134,58,.14));
-      border: 1px solid rgba(217,184,106,.26);
-      border-radius: 12px;
-    }
-    .ribbon::before{ left:0; transform: skewX(-12deg); }
-    .ribbon::after{ right:0; transform: skewX(12deg); }
-    .ribbon .knot{
-      position:absolute;
-      left:50%;
-      top: 8px;
-      transform: translateX(-50%);
-      width: 110px;
-      height: 34px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(217,184,106,.22), rgba(169,134,58,.10));
-      border: 1px solid rgba(217,184,106,.25);
-    }
-
-    .waxSeal{
-      width: 118px;
-      height: 118px;
-      margin: 0 auto;
-      border-radius: 999px;
-      cursor:pointer;
-      position:relative;
-      background:
-        radial-gradient(circle at 30% 28%, rgba(255,255,255,.18), transparent 45%),
-        radial-gradient(circle at 60% 70%, rgba(0,0,0,.22), transparent 52%),
-        radial-gradient(circle at 50% 50%, rgba(166, 24, 52, .95), rgba(96, 8, 24, .98));
-      box-shadow:
-        0 26px 60px rgba(0,0,0,.65),
-        inset 0 0 0 2px rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.08);
-      display:grid;
-      place-items:center;
-      transition: transform .18s ease;
-      user-select:none;
-    }
-    .waxSeal:hover{ transform: translateY(-1px) scale(1.02); }
-
-    .waxSeal .stamp{
-      width: 76px;
-      height: 76px;
-      border-radius: 999px;
-      border: 1px solid rgba(217,184,106,.45);
-      box-shadow: inset 0 0 0 2px rgba(0,0,0,.22);
-      display:grid;
-      place-items:center;
-      color: rgba(233,230,223,.88);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      letter-spacing:.14em;
-      font-weight: 700;
-      background: radial-gradient(circle at 35% 35%, rgba(0,0,0,.08), rgba(0,0,0,.22));
-    }
-
-    .sealHint{
-      margin-top: 14px;
-      color: rgba(233,230,223,.78);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 13px;
-    }
-    .sealHint strong{
-      color: rgba(217,184,106,.95);
-      font-weight: 700;
-    }
-
-    .sealOverlay.breaking .waxSeal{
-      animation: crack .75s cubic-bezier(.2,.9,.2,1) both;
-    }
-    @keyframes crack{
-      0%{ transform: translateY(0) scale(1) rotate(0deg); filter: none; }
-      35%{ transform: translateY(-2px) scale(1.04) rotate(-2deg); }
-      70%{ transform: translateY(3px) scale(.98) rotate(3deg); }
-      100%{ transform: translateY(40px) scale(.70) rotate(10deg); opacity:0; filter: blur(1px); }
-    }
-
-    .sealOverlay.breaking .ribbon{
-      animation: ribbonSlip .85s ease both;
-    }
-    @keyframes ribbonSlip{
-      to{ transform: translateY(18px); opacity:0; }
-    }
-  </style>
+@keyframes blink{
+    50%{opacity:0;}
+}
+</style>
 </head>
 
 <body>
-  <div class="dust"></div>
 
-  <div class="wrap">
-    <div class="stage">
-      <div class="header">
-        <div class="title">
-          <div class="kicker">A PRIVATE NOTE</div>
-          <div class="sub">Tap the page (or use Next) to turn. ← / → also works.</div>
-        </div>
+<div class="book" id="book">
 
-        <div class="controls">
-          <button id="prevBtn" type="button" aria-label="Previous page">← Prev</button>
-          <button id="nextBtn" type="button" aria-label="Next page">Next →</button>
-          <span class="progress" id="progress"></span>
-        </div>
-      </div>
+<div class="controls">
+<button id="prevBtn">← Prev</button>
+<button id="nextBtn">Next →</button>
+<button id="restartBtn">↺ Restart</button>
+</div>
 
-      <div class="book bookFade" id="book" aria-label="Birthday book">
-        <div class="spineGlow"></div>
-        <div class="tap" id="tapArea" aria-label="Tap to turn page" title="Tap to turn page"></div>
+<div class="sealOverlay" id="sealOverlay">
+<div class="waxSeal" id="waxSeal"><span>N</span></div>
+</div>
 
-        <!-- Wax seal overlay -->
-        <div class="sealOverlay" id="sealOverlay" aria-label="Wax seal overlay">
-          <div class="sealCard">
-            <div class="whisper">SEALED FOR YOUR EYES ONLY</div>
-            <div class="ribbon">
-              <div class="knot"></div>
-            </div>
-            <div class="waxSeal" id="waxSeal" role="button" aria-label="Break the seal" title="Break the seal">
-              <div class="stamp">N</div>
-            </div>
-            <div class="sealHint">Tap the wax seal to <strong>break</strong> it.</div>
-          </div>
-        </div>
+<!-- Sheet 1 -->
+<div class="sheet">
+<div class="page">
+<h1 class="tw">Happy 22nd Birthday<span class="caret">|</span></h1>
+</div>
+<div class="page back">
+<h2>Happy Birthday Beautiful!</h2>
+<p class="tw">
+I cannot believe that lovely girl who I met 3 and a half years ago is 22 (and somehow my girlfriend).
+I am so glad I get to spend every day with you and do so many things I have always wanted to do with you.
+You have made my heart extremely full and my wallet extremely empty, and I could not be happier for it.
+You are truly a one of a kind mix of beauty, sophistication, elegance, and creativity.
+Every step you take forward or backwards excites me because I love being by your side.
+I love every single thing about you and am so excited to do all of my future with you.
+I believe in you so so much, and am so excited to see what you accomplish.
+Thank you so much for being my rock and the bright spot of my each and every day.
+You are the best thing that could've ever happed to me.
 
-        <!-- SHEET 0 (Pages 1–2) -->
-        <div class="sheet" data-i="0">
-          <div class="page front" data-face="0">
-            <div class="content">
-              <div class="sigil">22</div>
-              <div class="small">Chapter One</div>
-              <div class="divider"></div>
-              <h1 class="gold tw" data-tw>
-                Happy 22nd Birthday<span class="caret">▍</span>
-              </h1>
-              <p class="tw" data-tw data-speed="18">
-                (Tap to continue.)<span class="caret">▍</span>
-              </p>
-            </div>
-          </div>
-          <div class="page back" data-face="1">
-            <div class="content">
-              <div class="small">A message, revealed</div>
-              <div class="divider"></div>
-              <h2 class="gold">Happy Birthday Beautiful!</h2>
-              <p class="tw" data-tw data-speed="14">
-                I cannot believe that lovely girl who I met 3 and a half years ago is 22 (and somehow my girlfriend).
-                I am so glad I get to spend every day with you and do so many things I have always wanted to do with you.
-                You have made my heart extremely full and my wallet extremely empty, and I could not be happier for it.
-                You are truly a one of a kind mix of beauty, sophistication, elegance, and creativity.
-                Every step you take forward or backwards excites me because I love being by your side.
-                I love every single thing about you and am so excited to do all of my future with you.
-                I believe in you so so much, and am so excited to see what you accomplish.
-                Thank you so much for being my rock and the bright spot of my each and every day.
-                You are the best thing that could've ever happed to me.
-                Love, Nicolas<span class="caret">▍</span>
-              </p>
-            </div>
-          </div>
-        </div>
+Love,
+Nicolas<span class="caret">|</span>
+</p>
+</div>
+</div>
 
-        <!-- SHEET 1 (Pages 3–4) -->
-        <div class="sheet" data-i="1">
-          <div class="page front" data-face="2">
-            <div class="content">
-              <div class="small">Chapter Two</div>
-              <div class="divider"></div>
-              <h2 class="gold">Now for your 22nd birthday…</h2>
-              <p class="tw" data-tw data-speed="16">
-                There are a couple surprises in store. Firstly, think of something that you have loved for a long time, and something that you'd love to see everyday. Those are the only hints for your gifts.<span class="caret">▍</span>
-              </p>
-            </div>
-          </div>
-          <div class="page back" data-face="3">
-            <div class="content">
-              <div class="small">Friday • February 20</div>
-              <div class="divider"></div>
-              <h2 class="gold">Your presence is requested</h2>
-              <p class="tw" data-tw data-speed="14">
-                For February 20th, Nicolas Andreano is requesting your presence at 11 am CST for the beginning of the celebration. He requests you bring only yourself and nothing more. Don't worry there will be pictures (This is not a proposal). You will be escorted by your chauffeur promptly and this will kickstart a lovely weekend. Then comes Emmy. Later that night you shall be treated to a lovely birthday homecooked steak dinner with a phenomenal homemade Pinot Noir to go with your entree.<span class="caret">▍</span>
-              </p>
-            </div>
-          </div>
-        </div>
+<!-- Sheet 2 -->
+<div class="sheet">
+<div class="page">
+<h2>Now for your 22nd birthday…</h2>
+<p class="tw">
+There are a couple surprises in store. Firstly, think of something that you have loved for a long time, and something that you'd love to see everyday. Those are the only hints for your gifts.<span class="caret">|</span>
+</p>
+</div>
+<div class="page back">
+<h2>Friday February 20</h2>
+<p class="tw">
+For February 20th, Nicolas Andreano is requesting your presence at 11 am CST for the beginning of the celebration. He requests you bring only yourself and nothing more. Don't worry there will be pictures (This is not a proposal). You will be escorted by your chauffeur promptly and this will kickstart a lovely weekend. Then comes Emmy. Later that night you shall be treated to a lovely birthday homecooked steak dinner with a phenomenal homemade Pinot Noir to go with your entree.<span class="caret">|</span>
+</p>
+</div>
+</div>
 
-        <!-- SHEET 2 (Pages 5–6) -->
-        <div class="sheet" data-i="2">
-          <div class="page front" data-face="4">
-            <div class="content">
-              <div class="small">Saturday • February 21</div>
-              <div class="divider"></div>
-              <h2 class="gold">A rooftop interlude</h2>
-              <p class="tw" data-tw data-speed="16">
-                Next on Saturday February 21st, there will be a nice quaint gathering at a certain rooftop bar. Please do not book a workout class on Sunday as there will be plenty of enjoyment. I also recommend eating before, as fries are the only good thing at said rooftop bar. This event will take place circa 6:30-7 pm.<span class="caret">▍</span>
-              </p>
-            </div>
-          </div>
-          <div class="page back" data-face="5">
-            <div class="content">
-              <div class="small">Sunday</div>
-              <div class="divider"></div>
-              <h2 class="gold">One last trick</h2>
-              <p class="tw" data-tw data-speed="16">
-                Finally on Sunday, I have another trick up my sleeve, but you will just have to wait and see for that one.
-                Please RSVP to nickmandre@gmail.com if you plan on attending these festivites and celebrating the birthday of a wonderful young lady.<span class="caret">▍</span>
-              </p>
-              <p class="small" style="margin-top:14px; text-transform:none; letter-spacing:.02em;">
-                (Tap once more to close the book.)
-              </p>
-            </div>
-          </div>
-        </div>
+<!-- Sheet 3 -->
+<div class="sheet">
+<div class="page">
+<h2>Saturday February 21</h2>
+<p class="tw">
+There will be a nice quaint gathering at a certain rooftop bar. Please do not book a workout class on Sunday as there will be plenty of enjoyment. I recommend eating before, as fries are the only good thing at said rooftop bar. This event will take place circa 6:30-7 pm.<span class="caret">|</span>
+</p>
+</div>
+<div class="page back">
+<h2>Sunday</h2>
+<p class="tw">
+Finally on Sunday, I have another trick up my sleeve, but you will just have to wait and see for that one.
 
-      </div>
+Please RSVP to nickmandre@gmail.com if you plan on attending these festivities and celebrating the birthday of a wonderful young lady.<span class="caret">|</span>
+</p>
+</div>
+</div>
 
-      <div class="hint">Tip: typewriter reveals re-run each time you visit a page</div>
-    </div>
-  </div>
+</div>
 
-  <script>
-    (function(){
-      const sheets = Array.from(document.querySelectorAll(".sheet"));
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      const tapArea = document.getElementById("tapArea");
-      const progress = document.getElementById("progress");
+<script>
+const sheets = document.querySelectorAll(".sheet");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const restartBtn = document.getElementById("restartBtn");
+const sealOverlay = document.getElementById("sealOverlay");
+const waxSeal = document.getElementById("waxSeal");
 
-      const sealOverlay = document.getElementById("sealOverlay");
-      const waxSeal = document.getElementById("waxSeal");
+let current = 0;
+let unlocked = false;
+let flipping = false;
 
-      const totalFaces = sheets.length * 2; // 6
-      let pageIndex = 0;                   // 0..5
-      let unlocked = false;
+function update(){
+sheets.forEach((sheet,i)=>{
+sheet.classList.toggle("flipped",i<current);
+sheet.style.zIndex = sheets.length - i;
+});
+prevBtn.disabled = current===0;
+nextBtn.disabled = current===sheets.length;
+}
 
-      // --- Typewriter setup ---
-      // Store original text for each [data-tw] element (minus caret)
-      const twEls = Array.from(document.querySelectorAll("[data-tw]"));
-      twEls.forEach(el => {
-        const caret = el.querySelector(".caret");
-        const caretHtml = caret ? caret.outerHTML : "";
-        const raw = (el.innerText || "").replace("▍","").trimEnd();
-        el.dataset.twText = raw;
-        el.dataset.twCaret = caretHtml || '<span class="caret">▍</span>';
-        el.dataset.twSpeed = el.dataset.speed || "16";
-      });
+function next(){
+if(!unlocked||flipping||current>=sheets.length)return;
+flipping=true;
+current++;
+update();
+setTimeout(()=>flipping=false,1200);
+}
 
-      let activeTimers = [];
+function prev(){
+if(!unlocked||flipping||current<=0)return;
+flipping=true;
+current--;
+update();
+setTimeout(()=>flipping=false,1200);
+}
 
-      function escapeHtml(s){
-        return s
-          .replaceAll("&","&amp;")
-          .replaceAll("<","&lt;")
-          .replaceAll(">","&gt;")
-          .replaceAll('"',"&quot;")
-          .replaceAll("'","&#039;");
-      }
+function restart(){
+if(!unlocked||flipping)return;
+current=0;
+update();
+}
 
-      function stopTyping(){
-        activeTimers.forEach(t => clearTimeout(t));
-        activeTimers = [];
-      }
+nextBtn.onclick=next;
+prevBtn.onclick=prev;
+restartBtn.onclick=restart;
+document.addEventListener("keydown",e=>{
+if(e.key==="ArrowRight")next();
+if(e.key==="ArrowLeft")prev();
+});
 
-      function runTypewriterForFace(faceIndex){
-        stopTyping();
+waxSeal.onclick=()=>{
+sealOverlay.classList.add("hidden");
+unlocked=true;
+update();
+};
 
-        // Find the visible face node
-        const face = document.querySelector(`.page[data-face="${faceIndex}"]`);
-        if (!face) return;
+update();
+</script>
 
-        const elements = Array.from(face.querySelectorAll("[data-tw]"));
-        // If you want sequential typing (one after another), chain them
-        let chainDelay = 0;
-
-        elements.forEach(el => {
-          const full = el.dataset.twText || "";
-          const speed = Math.max(8, Number(el.dataset.twSpeed || 16)); // ms per char
-          const caretHtml = el.dataset.twCaret || "";
-
-          // Clear and type
-          const start = () => {
-            const isHeading = el.tagName.toLowerCase().startsWith("h");
-            // Keep any existing child elements except caret (we'll re-add)
-            el.innerHTML = "";
-            let i = 0;
-
-            const tick = () => {
-              const shown = full.slice(0, i);
-              el.innerHTML = escapeHtml(shown).replaceAll("\n","<br>") + caretHtml;
-              i++;
-              if (i <= full.length){
-                activeTimers.push(setTimeout(tick, speed));
-              } else {
-                // remove caret after done for a cleaner look (optional)
-                activeTimers.push(setTimeout(() => {
-                  el.innerHTML = escapeHtml(full).replaceAll("\n","<br>");
-                  // For headings, keep it crisp; for paragraphs, keep as is
-                }, isHeading ? 280 : 450));
-              }
-            };
-            tick();
-          };
-
-          // Stagger start slightly if multiple on same page
-          activeTimers.push(setTimeout(start, chainDelay));
-          chainDelay += Math.min(1200, full.length * speed * 0.25);
-        });
-      }
-
-      // --- Book rendering logic (true “pages”) ---
-      function render(animateTypewriter = true){
-        const currentSheet = Math.floor(pageIndex / 2);
-        const showBack = (pageIndex % 2) === 1;
-
-        sheets.forEach((s, idx) => {
-          // state
-          const flipped =
-            (idx < currentSheet) ? true :
-            (idx > currentSheet) ? false :
-            showBack;
-
-          s.classList.toggle("flipped", flipped);
-
-          // z-index: current on top, previous behind, future under
-          // keep ordering stable so flips feel like paper turning
-          let z;
-          if (idx === currentSheet) z = 120;
-          else if (idx < currentSheet) z = 60 + idx;       // already turned pages
-          else z = 100 - idx;                               // upcoming pages
-          s.style.zIndex = String(z);
-        });
-
-        prevBtn.disabled = !unlocked || pageIndex === 0;
-        nextBtn.disabled = !unlocked || pageIndex === totalFaces - 1;
-
-        progress.textContent = unlocked
-          ? `Page ${pageIndex + 1} / ${totalFaces}`
-          : `Sealed`;
-
-        if (unlocked && animateTypewriter){
-          // Wait a beat so the flip animation starts, then type
-          setTimeout(() => runTypewriterForFace(pageIndex), 220);
-        }
-      }
-
-      function next(){
-        if (!unlocked) return;
-        if (pageIndex < totalFaces - 1){
-          pageIndex++;
-          render(true);
-        } else {
-          // close/reset
-          pageIndex = 0;
-          render(true);
-        }
-      }
-
-      function prev(){
-        if (!unlocked) return;
-        if (pageIndex > 0){
-          pageIndex--;
-          render(true);
-        }
-      }
-
-      // Controls
-      nextBtn.addEventListener("click", (e)=>{ e.stopPropagation(); next(); });
-      prevBtn.addEventListener("click", (e)=>{ e.stopPropagation(); prev(); });
-      tapArea.addEventListener("click", next);
-
-      window.addEventListener("keydown", (e)=>{
-        if (!unlocked) return;
-        if (e.key === "ArrowRight") next();
-        if (e.key === "ArrowLeft") prev();
-      });
-
-      // Wax seal unlock
-      waxSeal.addEventListener("click", () => {
-        if (unlocked) return;
-        sealOverlay.classList.add("breaking");
-        // after animation, hide overlay and unlock
-        setTimeout(() => {
-          sealOverlay.classList.add("hidden");
-          unlocked = true;
-          render(true);
-        }, 650);
-      });
-
-      // Initial render (locked)
-      render(false);
-    })();
-  </script>
 </body>
 </html>
